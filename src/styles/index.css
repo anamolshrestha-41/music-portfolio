@@ -2,27 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes fade-in-up {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
+@layer base {
+  html {
+    scroll-behavior: smooth;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+  
+  body {
+    @apply transition-colors duration-300;
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 1s ease-out forwards;
-}
-
-.animation-delay-300 {
-  animation-delay: 0.3s;
-  opacity: 0;
-}
-
-.animation-delay-600 {
-  animation-delay: 0.6s;
-  opacity: 0;
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+  
+  .focus\:not-sr-only:focus {
+    @apply static w-auto h-auto p-0 m-0 overflow-visible whitespace-normal;
+    clip: auto;
+  }
 }

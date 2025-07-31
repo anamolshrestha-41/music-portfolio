@@ -16,7 +16,7 @@
       ]
     },
     {
-      "source": "/resume/(.*\.pdf)",
+      "source": "/resume/(.*\\.pdf)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "source": "/(.*\.(js|css|png|jpg|jpeg|webp|svg|ico))",
+      "source": "/.*\\.(js|css|png|jpg|jpeg|webp|svg|ico)",
       "headers": [
         {
           "key": "Cache-Control",

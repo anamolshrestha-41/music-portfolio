@@ -1,37 +1,39 @@
 import { Helmet } from 'react-helmet-async'
 
 const SEOHead = ({ 
-  title, 
-  description, 
-  keywords, 
-  image = "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&h=630&fit=crop&fm=webp&q=80",
-  url = window.location.href 
+  title = "Anamol Shrestha - Professional Music Portfolio",
+  description = "Discover original compositions, voice samples, and musical creations by Anamol Shrestha. Professional musician crafting melodies that touch the soul.",
+  image = "/og-image.svg",
+  url = "",
+  type = "website"
 }) => {
-  const siteTitle = "Anamol's Music Portfolio"
-  const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle
+  const fullUrl = `https://music-portfolio-anamol.vercel.app${url}`
+  const fullImageUrl = image.startsWith('http') ? image : `https://music-portfolio-anamol.vercel.app${image}`
 
   return (
     <Helmet>
-      <title>{fullTitle}</title>
+      <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
       
       {/* Open Graph */}
-      <meta property="og:title" content={fullTitle} />
+      <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={type} />
+      <meta property="og:url" content={fullUrl} />
+      <meta property="og:image" content={fullImageUrl} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={title} />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={fullImageUrl} />
+      <meta name="twitter:image:alt" content={title} />
       
-      {/* Additional SEO */}
-      <meta name="author" content="Anamol" />
-      <link rel="canonical" href={url} />
+      {/* Canonical URL */}
+      <link rel="canonical" href={fullUrl} />
     </Helmet>
   )
 }

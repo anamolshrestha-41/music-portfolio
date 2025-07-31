@@ -6,8 +6,15 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 transition-all duration-300">
-      <nav className="container mx-auto px-4 py-4">
+    <>
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-purple-600 text-white px-4 py-2 rounded z-50"
+      >
+        Skip to main content
+      </a>
+      <header className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 transition-all duration-300">
+        <nav className="container mx-auto px-4 py-4" role="navigation" aria-label="Main navigation">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300">
@@ -38,6 +45,12 @@ const Header = () => {
               className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-300 font-medium py-2 px-4 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/20"
             >
               Portfolio
+            </Link>
+            <Link 
+              to="/licensing" 
+              className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-300 font-medium py-2 px-4 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/20"
+            >
+              Licensing
             </Link>
             <Link 
               to="/contact" 
@@ -89,6 +102,13 @@ const Header = () => {
               🎵 Portfolio
             </Link>
             <Link 
+              to="/licensing" 
+              onClick={() => setIsOpen(false)}
+              className="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-300 font-medium"
+            >
+              📄 Licensing
+            </Link>
+            <Link 
               to="/contact" 
               onClick={() => setIsOpen(false)}
               className="block px-4 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium text-center transition-all duration-300 hover:from-purple-700 hover:to-pink-700"
@@ -99,6 +119,7 @@ const Header = () => {
         </div>
       </nav>
     </header>
+    </>
   )
 }
 

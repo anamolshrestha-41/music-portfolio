@@ -16,37 +16,61 @@ export const AudioProvider = ({ children }) => {
   const audioRef = useRef(null)
 
   const playAudio = (src) => {
-    // If same audio, toggle play/pause
-    if (currentAudio === src && audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause()
-        setIsPlaying(false)
-      } else {
-        audioRef.current.play().catch(e => console.error('Audio play failed:', e))
-        setIsPlaying(true)
+    try {
+      // If same audio, toggle play/pause
+      if (currentAudio === src && audioRef.current) {
+        if (isPlaying) {
+          audioRef.current.pause()
+          setIsPlaying(false)
+        } else {
+          audioRef.current.play().then(() => {
+            setIsPlaying(true)
+          }).catch(e => {
+            console.error('Audio play failed:', e)
+            setIsPlaying(false)
+          })
+        }
+        return
       }
-      return
-    }
 
-    // Stop current audio if playing different one
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current = null
-    }
+      // Stop current audio if playing different one
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      }
 
-    // Create and play new audio
-    const audio = new Audio(src)
-    audioRef.current = audio
-    setCurrentAudio(src)
-    setIsPlaying(true)
-    
-    audio.play().catch(e => console.error('Audio play failed:', e))
-    
-    // Clean up when audio ends
-    audio.onended = () => {
-      setCurrentAudio(null)
+      // Create and play new audio
+      const audio = new Audio(src)
+      audio.volume = 0.7
+      
+      audioRef.current = audio
+      setCurrentAudio(src)
+      
+      // Play audio
+      audio.play().then(() => {
+        setIsPlaying(true)
+      }).catch(e => {
+        console.error('Audio play failed:', e)
+        setIsPlaying(false)
+        setCurrentAudio(null)
+      })
+      
+      // Clean up when audio ends
+      audio.onended = () => {
+        setCurrentAudio(null)
+        setIsPlaying(false)
+      }
+      
+      audio.onerror = (e) => {
+        console.error('Audio error:', e)
+        setIsPlaying(false)
+        setCurrentAudio(null)
+      }
+      
+    } catch (error) {
+      console.error('Audio setup failed:', error)
       setIsPlaying(false)
-      audioRef.current = null
+      setCurrentAudio(null)
     }
   }
 

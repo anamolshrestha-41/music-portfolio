@@ -1,0 +1,13 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width='1200' height='630' fill='url(#bg)'/>
+  <text x='600' y='250' font-size='72' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-weight='bold'>Anamol Shrestha</text>
+  <text x='600' y='320' font-size='36' text-anchor='middle' fill='#e2e8f0' font-family='Arial, sans-serif'>Professional Music Portfolio</text>
+  <text x='600' y='380' font-size='24' text-anchor='middle' fill='#cbd5e0' font-family='Arial, sans-serif'>Crafting melodies that touch the soul</text>
+  <text x='600' y='480' font-size='120' text-anchor='middle' fill='white'>🎵</text>
+</svg>

@@ -1,65 +1,45 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
-const AnimatedTitle = ({ text = "Welcome to Anamol's Music World", effect = "typewriter", className = "" }) => {
+const AnimatedTitle = ({ text, effect = 'typewriter', className = '' }) => {
   const [displayText, setDisplayText] = useState('')
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     if (effect === 'typewriter') {
-      let index = 0
-      const timer = setInterval(() => {
-        setDisplayText(text.slice(0, index + 1))
-        index++
-        if (index >= text.length) {
-          clearInterval(timer)
-        }
-      }, 100)
-      return () => clearInterval(timer)
+      if (currentIndex < text.length) {
+        const timeout = setTimeout(() => {
+          setDisplayText(prev => prev + text[currentIndex])
+          setCurrentIndex(prev => prev + 1)
+        }, 100)
+        return () => clearTimeout(timeout)
+      }
+    } else {
+      setDisplayText(text)
     }
-  }, [text, effect])
-
-  const slideVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 1, ease: "easeOut" }
-    }
-  }
-
-  const typewriterVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { duration: 0.5 }
-    }
-  }
+  }, [currentIndex, text, effect])
 
   if (effect === 'typewriter') {
     return (
-      <motion.h1
-        className={`font-bold ${className}`}
-        variants={typewriterVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <h1 className={className}>
         {displayText}
         <motion.span
           animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+          transition={{ duration: 0.8, repeat: Infinity }}
+          className="inline-block"
         >
           |
         </motion.span>
-      </motion.h1>
+      </h1>
     )
   }
 
   return (
-    <motion.h1
-      className={`font-bold ${className}`}
-      variants={slideVariants}
-      initial="hidden"
-      animate="visible"
+    <motion.h1 
+      className={className}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
     >
       {text}
     </motion.h1>

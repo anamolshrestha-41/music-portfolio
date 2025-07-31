@@ -10,6 +10,8 @@ const ContactForm = () => {
     message: ''
   })
   const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(null)
 
   const reasons = [
     { value: '', label: 'Select a reason' },
@@ -42,12 +44,32 @@ const ContactForm = () => {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (validateForm()) {
-      console.log('Form submitted:', formData)
-      // Handle form submission here
-      setFormData({ name: '', email: '', reason: '', message: '' })
+      setIsSubmitting(true)
+      setSubmitStatus(null)
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        })
+        
+        if (response.ok) {
+          setSubmitStatus('success')
+          setFormData({ name: '', email: '', reason: '', message: '' })
+        } else {
+          setSubmitStatus('error')
+        }
+      } catch (error) {
+        setSubmitStatus('error')
+      } finally {
+        setIsSubmitting(false)
+      }
     }
   }
 
@@ -58,40 +80,56 @@ const ContactForm = () => {
       variants={slideUp}
     >
       <motion.div variants={slideUp}>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+          Your Name *
+        </label>
         <input
           type="text"
+          id="name"
           name="name"
           value={formData.name}
           onChange={handleChange}
-
-          placeholder="Your Name"
+          placeholder="Enter your full name"
+          required
+          aria-describedby={errors.name ? 'name-error' : undefined}
           className={`w-full p-3 sm:p-4 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 text-sm sm:text-base ${
             errors.name ? 'border-red-500' : 'border-gray-700'
           }`}
         />
-        {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
+        {errors.name && <p id="name-error" className="text-red-400 text-xs mt-1" role="alert">{errors.name}</p>}
       </motion.div>
 
       <motion.div variants={slideUp}>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+          Your Email *
+        </label>
         <input
           type="email"
+          id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-
-          placeholder="Your Email"
+          placeholder="Enter your email address"
+          required
+          aria-describedby={errors.email ? 'email-error' : undefined}
           className={`w-full p-3 sm:p-4 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 text-sm sm:text-base ${
             errors.email ? 'border-red-500' : 'border-gray-700'
           }`}
         />
-        {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+        {errors.email && <p id="email-error" className="text-red-400 text-xs mt-1" role="alert">{errors.email}</p>}
       </motion.div>
 
       <motion.div variants={slideUp}>
+        <label htmlFor="reason" className="block text-sm font-medium text-gray-300 mb-2">
+          Reason for Contact *
+        </label>
         <select
+          id="reason"
           name="reason"
           value={formData.reason}
           onChange={handleChange}
+          required
+          aria-describedby={errors.reason ? 'reason-error' : undefined}
           className={`w-full p-3 sm:p-4 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white text-sm sm:text-base ${
             errors.reason ? 'border-red-500' : 'border-gray-700'
           }`}
@@ -102,31 +140,58 @@ const ContactForm = () => {
             </option>
           ))}
         </select>
-        {errors.reason && <p className="text-red-400 text-xs mt-1">{errors.reason}</p>}
+        {errors.reason && <p id="reason-error" className="text-red-400 text-xs mt-1" role="alert">{errors.reason}</p>}
       </motion.div>
 
       <motion.div variants={slideUp}>
+        <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+          Your Message *
+        </label>
         <textarea
+          id="message"
           name="message"
           value={formData.message}
           onChange={handleChange}
           rows="4"
-          placeholder="Your Message"
+          placeholder="Tell me about your project or inquiry"
+          required
+          aria-describedby={errors.message ? 'message-error' : undefined}
           className={`w-full p-3 sm:p-4 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 resize-none text-sm sm:text-base ${
             errors.message ? 'border-red-500' : 'border-gray-700'
           }`}
         />
-        {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message}</p>}
+        {errors.message && <p id="message-error" className="text-red-400 text-xs mt-1" role="alert">{errors.message}</p>}
       </motion.div>
+
+      {submitStatus === 'success' && (
+        <motion.div 
+          className="p-4 bg-green-600 text-white rounded-lg text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          Message sent successfully! 🎉
+        </motion.div>
+      )}
+      
+      {submitStatus === 'error' && (
+        <motion.div 
+          className="p-4 bg-red-600 text-white rounded-lg text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          Failed to send message. Please try again.
+        </motion.div>
+      )}
 
       <motion.button
         type="submit"
-        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 sm:py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-colors text-sm sm:text-base"
+        disabled={isSubmitting}
+        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 sm:py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
         variants={slideUp}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+        whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
       >
-        Send Message
+        {isSubmitting ? 'Sending...' : 'Send Message'}
       </motion.button>
     </motion.form>
   )
