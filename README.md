@@ -570,6 +570,6 @@ Anamol represents the new generation of musicians who understand that artistic e
 
 ### **"This isn't just a portfolio—it's the future of how musicians connect with their audience."**
 
-*Built with ❤️ by [Anamol Shrestha](https://github.com/anamolshrestha) | © 2024 | MIT License*
+*Built with ❤️ by [Anamol Shrestha](https://github.com/anamolshrestha-41) | © 2024 | MIT License*
 
 </div>
